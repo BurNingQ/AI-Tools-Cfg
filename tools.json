@@ -1,4 +1,15 @@
 [
+  {
+    "id": "claudeCli",
+    "name": "ClaudeCli",
+    "description": "官方claude，新时代最强AI IDE，支持各种大模型",
+    "category": "AI IDE",
+    "version": "latest",
+    "fileType": "exe",
+    "website": "---",
+    "downloadUrl": "https://ai-tools-cfg.pages.dev/caludecode.exe",
+    "icon": "🦙",
+  },
   // ─── LLM 运行器 ───
   {
     "id": "ollama",
