@@ -1,0 +1,148 @@
+[
+  // ─── 快速安装 ───
+  {
+    "id": "install-ollama",
+    "name": "一键安装 Ollama",
+    "description": "静默下载并安装 Ollama，然后自动拉取 llama3.2 模型，安装完成即可使用。",
+    "category": "快速安装",
+    "icon": "🦙",
+    "command": [
+      'echo 正在下载 Ollama...',
+      'curl -L https://ollama.com/download/OllamaSetup.exe -o %TEMP%\\OllamaSetup.exe 2>nul',
+      'start /wait %TEMP%\\OllamaSetup.exe /S',
+      "ollama pull llama3.2",
+    ].join(" && "),
+    "timeout": 600,
+  },
+  {
+    "id": "install-python-ai",
+    "name": "配置 Python AI 环境",
+    "description":
+      "一键安装常用 Python AI 包：PyTorch、Transformers、Diffusers、Gradio、OpenAI、LangChain 等。",
+    "category": "快速安装",
+    "icon": "🐍",
+    "command": [
+      "pip install --upgrade pip",
+      "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121",
+      "pip install transformers diffusers accelerate gradio",
+      "pip install openai langchain chromadb",
+      'echo Python AI 环境配置完成！',
+    ].join(" && "),
+    "timeout": 600,
+  },
+  {
+    "id": "install-docker",
+    "name": "安装 Docker Desktop",
+    "description":
+      "下载并安装 Docker Desktop，运行容器化 AI 服务的必备环境。安装后可能需要重启系统。",
+    "category": "快速安装",
+    "icon": "🐳",
+    "command": [
+      'echo 正在下载 Docker Desktop...',
+      'curl -L https://desktop.docker.com/win/main/amd64/Docker%%20Desktop%%20Installer.exe -o %TEMP%\\DockerInstaller.exe 2>nul',
+      'start /wait %TEMP%\\DockerInstaller.exe install --quiet',
+      "echo Docker 安装完成，请重启系统后使用。",
+    ].join(" && "),
+    "timeout": 900,
+  },
+
+  // ─── Claude 部署 ───
+  {
+    "id": "deploy-claude-desktop",
+    "name": "部署 Claude Desktop",
+    "description":
+      "一键下载并安装 Claude 桌面客户端（Anthropic 官方应用），支持 Claude Opus、Sonnet、Haiku 模型。",
+    "category": "Claude",
+    "icon": "🧪",
+    "command": [
+      'echo 正在安装 Claude Desktop...',
+      'curl -L https://storage.googleapis.com/claude-app-bucket/Claude-Setup.exe -o %TEMP%\\Claude-Setup.exe 2>nul',
+      'start /wait %TEMP%\\Claude-Setup.exe /S',
+      "echo Claude Desktop 安装完成！",
+    ].join(" && "),
+    "timeout": 300,
+  },
+  {
+    "id": "install-claude-cli",
+    "name": "安装 Claude Code CLI（npm）",
+    "description":
+      "通过 npm 全局安装 Claude Code 命令行工具，在终端中使用 AI 辅助编程。",
+    "category": "Claude",
+    "icon": "⌨️",
+    "command": [
+      "npm install -g @anthropic-ai/claude-code",
+      "echo Claude Code CLI 安装完成！运行 claude 开始使用。",
+    ].join(" && "),
+    "timeout": 120,
+  },
+
+  // ─── 系统工具 ───
+  {
+    "id": "check-cuda",
+    "name": "检测 CUDA / GPU 状态",
+    "description":
+      "查看 NV"id"IA 显卡信息、驱动版本和 CUDA 版本，安装 GPU 加速工具前建议先检测。",
+    "category": "系统工具",
+    "icon": "🎮",
+    "command": [
+      'echo === NV"id"IA 显卡信息 ===',
+      'nv"id"ia-smi --query-gpu="name",driver_version,memory.total --format=csv 2>nul || echo "未找到 nv"id"ia-smi — 可能没有 NV"id"IA 显卡或未安装驱动"',
+      'echo.',
+      'echo === CUDA Toolkit ===',
+      'nvcc --version 2>nul || echo "PATH 中未找到 CUDA Toolkit"',
+    ].join(" && "),
+    "timeout": 30,
+  },
+  {
+    "id": "check-python",
+    "name": "检测 Python 环境",
+    "description":
+      "快速查看已安装的 Python 版本和 AI 相关 pip 包（PyTorch、Transformers 等）。",
+    "category": "系统工具",
+    "icon": "📋",
+    "command": [
+      'echo === Python 版本 ===',
+      "python --version 2>nul || python3 --version 2>nul || echo 未找到 Python",
+      'echo.',
+      'echo === AI 相关包 ===',
+      "pip list 2>nul | findstr /i \"torch transformers diffusers openai langchain ollama gradio\" || echo 未找到 AI 相关包",
+    ].join(" && "),
+    "timeout": 30,
+  },
+  {
+    "id": "check-git",
+    "name": "安装 / 检测 Git",
+    "description":
+      "检测 Git 是否已安装（未安装则自动下载安装）。大多数 AI 仓库需要通过 Git 克隆。",
+    "category": "系统工具",
+    "icon": "🔧",
+    "command": [
+      'git --version && echo "Git 已安装。" || (echo "正在安装 Git..." && curl -L https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe -o %TEMP%\\GitInstaller.exe 2>nul && start /wait %TEMP%\\GitInstaller.exe /VERYSILENT /NORESTART && echo "Git 安装完成！")',
+    ].join(" && "),
+    "timeout": 300,
+  },
+
+  // ─── AI 服务管理 ───
+  {
+    "id": "start-ollama-service",
+    "name": "启动 Ollama 服务",
+    "description":
+      "如果 Ollama 已安装但未运行，则启动 Ollama 后台服务。使用 ollama run/pull 前需要先启动。",
+    "category": "服务管理",
+    "icon": "▶️",
+    "command": [
+      'tasklist /fi "image"name" eq ollama.exe" 2>nul | find /i "ollama.exe" >nul && echo "Ollama 已在运行中。" || (start "" "ollama" serve && echo "Ollama 服务已启动。")',
+    ].join(" && "),
+    "timeout": 15,
+  },
+  {
+    "id": "list-ollama-models",
+    "name": "查看已安装的 Ollama 模型",
+    "description":
+      "列出本机已拉取的所有 Ollama 模型及大小。",
+    "category": "服务管理",
+    "icon": "📦",
+    "command": ["ollama list 2>nul || echo 'Ollama 未安装或不在 PATH 中'"].join(" && "),
+    "timeout": 15,
+  },
+];
